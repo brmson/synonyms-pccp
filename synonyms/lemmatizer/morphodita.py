@@ -11,7 +11,7 @@ def sort_entities(entities):
 
 
 def lemmatize(file, output_file):
-    morphodita_model = '/home/vesely/Research/Synonyms/synonyms/lemmatizer/czech-morfflex-pdt-131112-raw_lemmas.tagger-best_accuracy'
+    morphodita_model = os.path.join(dir_cur, 'czech-morfflex-pdt-131112-raw_lemmas.tagger-best_accuracy')
     tagger = Tagger.load(morphodita_model)
     assert tagger
     forms = Forms()
