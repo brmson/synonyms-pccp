@@ -1,0 +1,7 @@
+numpy
+scipy
+scikit-learn
+argparse
+ufal.morphodita
+ufal.nametag
+futures
