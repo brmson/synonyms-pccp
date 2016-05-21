@@ -10,6 +10,7 @@ import copy
 
 class Dictionary:
     regex = re.compile('#dictionary version=(\d+) size=(\d+)')
+    aliasregex = re.compile('[-_].*$')
     current_version = 1
 
     def __init__(self, filename, min_occurrence=0):
@@ -39,8 +40,12 @@ class Dictionary:
         self.word2count = {}
         self.id2count = {}
         self.id2word = {}
+        self.alias2id = defaultdict(list)
 
     def __update_dict(self, word, id, count):
+        if '_' in word or '-' in word:
+            alias = re.sub(Dictionary.aliasregex, '', word)
+            self.alias2id[alias].append(id)
         self.word2id[word] = id
         self.word2count[word] = count
         self.id2word[id] = word
@@ -114,6 +119,13 @@ class Dictionary:
     def get_id(self, word):
         self.__check()
         return self.word2id[word]
+
+    def get_id_fuzzy(self, word):
+        self.__check()
+        try:
+           return [self.word2id[word]]
+        except KeyError:
+           return self.alias2id[word]
 
     def get_word2count(self, word):
         self.__check()

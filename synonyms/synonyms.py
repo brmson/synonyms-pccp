@@ -31,8 +31,14 @@ class SVDModel:
     def get_synonyms(self, target_word, k, return_ids=True, return_score=False):
         if not self._computed:
             self.__update_matrix()
-        target_id = self.dictionary.get_id(target_word)
-        score = list(map(abs, np.asarray(self.matrix[target_id, :] * self.matrix.T)[0, :]))
+        allscore = None
+        for target_id in self.dictionary.get_id_fuzzy(target_word):
+            tgscore = np.asarray(self.matrix[target_id, :] * self.matrix.T)[0, :]
+            if allscore is None:
+                allscore = tgscore
+            else:
+                allscore += tgscore
+        score = list(map(abs, allscore))
         sorted_ids = np.argsort(score, axis=None)[::-1]
         data = (list(map(lambda x: self.dictionary.get_word(x), sorted_ids[1:k + 1])), )
         if return_ids:

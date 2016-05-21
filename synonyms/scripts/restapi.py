@@ -30,6 +30,7 @@ def get_synonyms():
 
     synonyms, ids, score = model.get_synonyms(word, k, return_ids=True, return_score=True)
 
+    print(word, k, synonyms)
     return jsonify({'syn': [{'word': syn, 'score': sc} for syn, sc in zip(synonyms, score)]}), 200
 
 
